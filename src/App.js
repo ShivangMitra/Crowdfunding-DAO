@@ -9,6 +9,7 @@ import Working from './components/Working';
 import Footer from './components/Footer';
 import CreateCampaign from './components/CreateCampaign';
 import CampaignPage from './components/CampaignPage';
+import Contact from './components/Contact';
 import { TbLayersLinked } from 'react-icons/tb'
 import { BiShowAlt } from 'react-icons/bi'
 import './App.css';
@@ -132,7 +133,16 @@ function App() {
           :
           null
         }
-        <Footer/>
+        {
+          pageState === 'contact'
+          ?
+          (
+            <Contact setPageState={setPageState} />
+          )
+          :
+          null
+        }
+        <Footer setPageState={setPageState} />
       </div>
     </ChakraProvider>
   );

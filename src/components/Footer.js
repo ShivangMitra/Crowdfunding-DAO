@@ -2,15 +2,17 @@ import React from 'react'
 import { Link, Heading, Text } from '@chakra-ui/react'
 import { AiFillGithub, AiFillPhone } from 'react-icons/ai'
 
-function Footer() {
+function Footer({ setPageState }) {
   return (
     <div className='footer-container' >
         <Heading fontSize='4xl' color='black' style={{ textAlign: 'center' }} >For The Crowd</Heading>
         <div className='links' >
-            <Link href='https://chakra-ui.com' isExternal style={{ display: 'flex', alignItems: 'center' }} >
+            <Link href='https://github.com/ShivangMitra/Crowdfunding-DAO' isExternal style={{ display: 'flex', alignItems: 'center' }} >
                 <AiFillGithub />Github
             </Link>
-            <Link style={{ display: 'flex', alignItems: 'center', marginLeft: '5%' }}>
+            <Link onClick={() => {
+              setPageState('contact')
+            }} style={{ display: 'flex', alignItems: 'center', marginLeft: '5%' }}>
                 <AiFillPhone/> Contact
             </Link>
         </div>
