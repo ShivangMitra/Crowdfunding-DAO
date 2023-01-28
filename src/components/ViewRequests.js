@@ -1,6 +1,7 @@
 import React from 'react'
 import { Heading, Text } from '@chakra-ui/react'
 import { MdArrowBack } from 'react-icons/md'
+import ReqCampaignCard from './ReqCampaignCard'
 
 function ViewRequests({ setPageState }) {
 
@@ -15,7 +16,12 @@ function ViewRequests({ setPageState }) {
             <Text color='tomato' fontWeight='bold'>Go Back</Text>
         </div>
 
-        <Heading style={{ marginBottom: '5%' }} >Fund Requests</Heading>
+        <Heading style={{ marginBottom: '5%' }} >Fund Requests <Text color='#0000005e' fontSize='ig' >Campaigns you have donated to</Text></Heading>
+
+        <ReqCampaignCard setPageState={setPageState} />
+        <ReqCampaignCard setPageState={setPageState} />
+        <ReqCampaignCard setPageState={setPageState} />
+        <ReqCampaignCard setPageState={setPageState} />
     </div>
   )
 }
