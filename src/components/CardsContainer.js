@@ -5,12 +5,12 @@ function CardsContainer({ setPageState }) {
   return (
     <div className='cards-container' >
         <Cards setPageState={setPageState} />
-        <Cards/>
-        <Cards/>
-        <Cards/>
-        <Cards/>
-        <Cards/>
-        <Cards/>
+        <Cards setPageState={setPageState} />
+        <Cards setPageState={setPageState} />
+        <Cards setPageState={setPageState} />
+        <Cards setPageState={setPageState} />
+        <Cards setPageState={setPageState} />
+        <Cards setPageState={setPageState} />
     </div>
   )
 }

@@ -44,6 +44,27 @@
   display: none;
 }
 
+.navbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffffc9;
+  padding: 1% 5%;
+  height: 10vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  backdrop-filter: saturate(180%) blur(10px);
+}
+
+.nav-items{
+  width: 38%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .header{
   padding: 3% 5%;
   width: 50%;
@@ -143,6 +164,13 @@
 }
 
 .requests-container{
+  background: white;
+  margin: 5% 10%;
+  padding: 5%;
+  border-radius: 10px;
+}
+
+.campaigns-container{
   background: white;
   margin: 5% 10%;
   padding: 5%;

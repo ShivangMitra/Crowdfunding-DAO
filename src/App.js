@@ -10,6 +10,8 @@ import Footer from './components/Footer';
 import CreateCampaign from './components/CreateCampaign';
 import CampaignPage from './components/CampaignPage';
 import Contact from './components/Contact';
+import MyCampaigns from './components/MyCampaigns';
+import ViewRequests from './components/ViewRequests';
 import { TbLayersLinked } from 'react-icons/tb'
 import { BiShowAlt } from 'react-icons/bi'
 import './App.css';
@@ -138,6 +140,24 @@ function App() {
           ?
           (
             <Contact setPageState={setPageState} />
+          )
+          :
+          null
+        }
+        {
+          pageState === 'myCampaigns'
+          ?
+          (
+            <MyCampaigns setPageState={setPageState} />
+          )
+          :
+          null
+        }
+        {
+          pageState === 'viewRequests'
+          ?
+          (
+            <ViewRequests setPageState={setPageState} />
           )
           :
           null

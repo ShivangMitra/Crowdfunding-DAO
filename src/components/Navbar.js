@@ -1,9 +1,17 @@
 import React from 'react'
 import { Button, Heading } from '@chakra-ui/react'
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuDivider
+} from '@chakra-ui/react'
 import { FaEthereum } from 'react-icons/fa'
 import { AiOutlineAppstoreAdd, AiOutlineInfoCircle, AiOutlineHome } from 'react-icons/ai'
-
-import './navbar.css'
+import { BsChevronDown, BsFillChatSquareQuoteFill } from 'react-icons/bs'
+import { MdCampaign } from 'react-icons/md'
 
 function Navbar({ address, loading, setPageState, pageState }) {
 
@@ -48,7 +56,23 @@ function Navbar({ address, loading, setPageState, pageState }) {
               )
               :
               (
-                <Button colorScheme='orange' backgroundColor={'tomato'} leftIcon={<FaEthereum />} >{address.substring(0,5)+'...'+address.substring(address.length-4)}</Button>
+                // <Button colorScheme='orange' backgroundColor={'tomato'} leftIcon={<FaEthereum />} >{address.substring(0,5)+'...'+address.substring(address.length-4)}</Button>
+                <Menu colorScheme='orange' >
+                  {({ isOpen }) => (
+                    <>
+                      <MenuButton isActive={isOpen} as={Button} colorScheme='orange' backgroundColor={'tomato'} rightIcon={<BsChevronDown />}>
+                        {address.substring(0,5)+'...'+address.substring(address.length-4)}
+                      </MenuButton>
+                      <MenuList fontWeight='bold'>
+                        <MenuGroup title='Your Profile' color='tomato' fontSize='1.1rem' >
+                          <MenuDivider />
+                          <MenuItem onClick={() => {setPageState('myCampaigns')}} ><MdCampaign color='tomato' style={{ marginRight: '5%', fontSize: '1.5rem' }} /> My Campaigns</MenuItem>
+                          <MenuItem onClick={() => {setPageState('viewRequests')}} ><BsFillChatSquareQuoteFill color='tomato' style={{ marginRight: '5%', fontSize: '1.5rem' }} /> View Requests</MenuItem>
+                        </MenuGroup>
+                      </MenuList>
+                    </>
+                  )}
+                </Menu>
               )
             }
         </div>
