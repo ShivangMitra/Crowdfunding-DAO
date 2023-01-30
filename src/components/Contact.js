@@ -20,11 +20,14 @@ function Contact({ setPageState }) {
         <div style={{ display: 'flex', flexDirection: 'column' }} >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >
                 <AiFillMail color='tomato' fontSize='700%' width='40%' />
-                <Text fontWeight='bold' fontSize='1.2rem' width='50%' >someone@gmail.com</Text>
+                <Text fontWeight='bold' fontSize='1.2rem' width='60%' >nisarg.39@nmims.edu.in
+                                                                    keshav.sureka57@nmims.edu.in
+                                                                    anshul.inani19@nmims.edu.in
+                                                                    ramansh.bhatia05@nmims.edu.in</Text>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >
                 <BsMailbox2 color='tomato' fontSize='700%' width='40%' />
-                <Text fontWeight='bold' fontSize='1.2rem' width='50%' >V. L, Pherozeshah Mehta Rd, Vile Parle West, Mumbai, Maharashtra 400056</Text>
+                <Text fontWeight='bold' fontSize='1.2rem' width='60%' >Mukesh Patel School Of Technology Management, Mumbai.</Text>
             </div>
         </div>
     </div>

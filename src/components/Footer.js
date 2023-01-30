@@ -7,7 +7,7 @@ function Footer({ setPageState }) {
     <div className='footer-container' >
         <Heading fontSize='4xl' color='black' style={{ textAlign: 'center' }} >For The Crowd</Heading>
         <div className='links' >
-            <Link href='https://github.com/ShivangMitra/Crowdfunding-DAO' isExternal style={{ display: 'flex', alignItems: 'center' }} >
+            <Link href='https://github.com/Nisarg62?tab=repositories' isExternal style={{ display: 'flex', alignItems: 'center' }} >
                 <AiFillGithub />Github
             </Link>
             <Link onClick={() => {
@@ -16,7 +16,7 @@ function Footer({ setPageState }) {
                 <AiFillPhone/> Contact
             </Link>
         </div>
-        <Text fontSize='xl' bgGradient='linear(to-l, #7928CA, #FF0080)' bgClip='text' fontWeight='bold'>Made by Nisarg, Shivang, Chintu1 & Chintu2</Text>
+        <Text fontSize='xl' bgGradient='linear(to-l, #7928CA, #FF0080)' bgClip='text' fontWeight='bold'>Made by Nisarg, Keshav Sureka, Anshul Inani, Ramansh Bhatia</Text>
     </div>
   )
 }
