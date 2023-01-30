@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ethers } from 'ethers';
-import { ChakraProvider, Divider, Heading } from '@chakra-ui/react';
+import { ChakraProvider, Divider, Heading, scroll } from '@chakra-ui/react';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import Stats from './components/Stats';
@@ -27,6 +27,8 @@ function App() {
   const [pageState, setPageState] = useState('home')
 
   const [metamask, setMetamask] = useState(true)
+
+  const scrollTop = useRef()
 
   const [abi, setabi] = useState([
     {
@@ -84,13 +86,18 @@ function App() {
       setMetamask(false)
     }
   }, [window.ethereum]);
+
+  useEffect(() => {
+    scrollTop.current.scrollTo(0, 0)
+  }, [pageState])
+  
   
 
   return (
     <ChakraProvider>
       <Alert metamask={metamask} />
       <div className={pageState === 'home' ? 'background' : 'background-two'} ></div>
-      <div className='scroll-container' >
+      <div className='scroll-container' ref={scrollTop} >
         <Navbar address={address} loading={loading} metamask={metamask} pageState={pageState} setPageState={setPageState} />
         <Divider/>
         {
