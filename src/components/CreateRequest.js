@@ -6,9 +6,9 @@ import { AiFillPlusCircle } from 'react-icons/ai'
 function CreateRequest({ setPageState }) {
 
     const [input, setInput] = useState({
-        reqDesc: '',
-        amt: '',
-        add: ''
+        reqDesc: null,
+        amt: null,
+        add: null
     })
 
     const errorReqDesc = input.reqDesc === ''

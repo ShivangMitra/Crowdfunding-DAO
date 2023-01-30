@@ -10,11 +10,11 @@ function CreateCampaign({ setPageState }) {
         }
 
     const [input, setInput] = useState({
-        minContri: '',
-        name: '',
-        desc: '',
-        url: '',
-        targetAmt: ''
+        minContri: null,
+        name: null,
+        desc: null,
+        url: null,
+        targetAmt: null
     })
 
     const errorMinContri = input.minContri === ''
@@ -50,7 +50,7 @@ function CreateCampaign({ setPageState }) {
         <FormControl isInvalid={errorName} style={{ marginBottom: '3%' }} >
             <FormLabel>Campaign Name</FormLabel>
                 <InputGroup>
-                    <Input type='number' value={input.name} onChange={(e) => {
+                    <Input type='text' value={input.name} onChange={(e) => {
                         setInput({...input, name: e.target.value})
                     }} />
                 </InputGroup>
@@ -65,7 +65,7 @@ function CreateCampaign({ setPageState }) {
         <FormControl isInvalid={errorDesc} style={{ marginBottom: '3%' }} >
             <FormLabel>Campaign Description</FormLabel>
                 <InputGroup>
-                    <Input type='number' value={input.desc} onChange={(e) => {
+                    <Input type='text' value={input.desc} onChange={(e) => {
                         setInput({...input, desc: e.target.value})
                     }} />
                 </InputGroup>
@@ -81,7 +81,7 @@ function CreateCampaign({ setPageState }) {
             <FormLabel>Image URL</FormLabel>
                 <InputGroup>
                     <InputLeftAddon children='https://' />
-                    <Input type='number' value={input.url} onChange={(e) => {
+                    <Input type='url' value={input.url} onChange={(e) => {
                         setInput({...input, url: e.target.value})
                     }} />
                 </InputGroup>

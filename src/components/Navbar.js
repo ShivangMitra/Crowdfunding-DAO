@@ -13,7 +13,7 @@ import { AiOutlineAppstoreAdd, AiOutlineInfoCircle, AiOutlineHome } from 'react-
 import { BsChevronDown, BsFillChatSquareQuoteFill } from 'react-icons/bs'
 import { MdCampaign } from 'react-icons/md'
 
-function Navbar({ address, loading, setPageState, pageState }) {
+function Navbar({ address, loading, setPageState, pageState, metamask }) {
 
   const handleCreateCampaign = () => {
     setPageState('createCampaign')
@@ -49,30 +49,37 @@ function Navbar({ address, loading, setPageState, pageState }) {
             }
             <Button onClick={handleScroll} colorScheme='orange' borderColor={'red.100'} color={'tomato'} leftIcon={<AiOutlineInfoCircle />} variant='outline' minW='30%' >How It Works</Button>
             {
-              loading
+              !metamask
               ?
               (
-                <Button isLoading colorScheme='orange' backgroundColor={'tomato'} leftIcon={<FaEthereum />} minW='30%' >Connect Wallet</Button>
+                <Button colorScheme='orange' backgroundColor={'tomato'} leftIcon={<FaEthereum />} minW='30%' >Connect Wallet</Button>
               )
               :
               (
-                // <Button colorScheme='orange' backgroundColor={'tomato'} leftIcon={<FaEthereum />} >{address.substring(0,5)+'...'+address.substring(address.length-4)}</Button>
-                <Menu colorScheme='orange' >
-                  {({ isOpen }) => (
-                    <>
-                      <MenuButton isActive={isOpen} as={Button} colorScheme='orange' backgroundColor={'tomato'} rightIcon={<BsChevronDown />}>
-                        {address.substring(0,5)+'...'+address.substring(address.length-4)}
-                      </MenuButton>
-                      <MenuList fontWeight='bold'>
-                        <MenuGroup title='Your Profile' color='tomato' fontSize='1.1rem' >
-                          <MenuDivider />
-                          <MenuItem onClick={() => {setPageState('myCampaigns')}} ><MdCampaign color='tomato' style={{ marginRight: '5%', fontSize: '1.5rem' }} /> My Campaigns</MenuItem>
-                          <MenuItem onClick={() => {setPageState('viewRequests')}} ><BsFillChatSquareQuoteFill color='tomato' style={{ marginRight: '5%', fontSize: '1.5rem' }} /> View Requests</MenuItem>
-                        </MenuGroup>
-                      </MenuList>
-                    </>
-                  )}
-                </Menu>
+                loading
+                ?
+                (
+                  <Button isLoading colorScheme='orange' backgroundColor={'tomato'} minW='30%' ></Button>
+                )
+                :
+                (
+                  <Menu colorScheme='orange' >
+                    {({ isOpen }) => (
+                      <>
+                        <MenuButton isActive={isOpen} as={Button} colorScheme='orange' backgroundColor={'tomato'} rightIcon={<BsChevronDown />}>
+                          {address.substring(0,5)+'...'+address.substring(address.length-4)}
+                        </MenuButton>
+                        <MenuList fontWeight='bold'>
+                          <MenuGroup title='Your Profile' color='tomato' fontSize='1.1rem' >
+                            <MenuDivider />
+                            <MenuItem onClick={() => {setPageState('myCampaigns')}} ><MdCampaign color='tomato' style={{ marginRight: '5%', fontSize: '1.5rem' }} /> My Campaigns</MenuItem>
+                            <MenuItem onClick={() => {setPageState('viewRequests')}} ><BsFillChatSquareQuoteFill color='tomato' style={{ marginRight: '5%', fontSize: '1.5rem' }} /> View Requests</MenuItem>
+                          </MenuGroup>
+                        </MenuList>
+                      </>
+                    )}
+                  </Menu>
+                )
               )
             }
         </div>

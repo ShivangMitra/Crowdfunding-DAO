@@ -12,6 +12,7 @@ import CampaignPage from './components/CampaignPage';
 import Contact from './components/Contact';
 import MyCampaigns from './components/MyCampaigns';
 import ViewRequests from './components/ViewRequests';
+import Alert from './components/Alert';
 import { TbLayersLinked } from 'react-icons/tb'
 import { BiShowAlt } from 'react-icons/bi'
 import './App.css';
@@ -24,6 +25,8 @@ function App() {
   const [signer, setSigner] = useState()
   const [loading, setLoading] = useState(true)
   const [pageState, setPageState] = useState('home')
+
+  const [metamask, setMetamask] = useState(true)
 
   const [abi, setabi] = useState([
     {
@@ -53,32 +56,42 @@ function App() {
   ])
 
   useEffect(() => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 
-    const contract = new ethers.Contract('0xf4395decdb4e1f0c3f0cb173cb83e68de631374c', abi, provider)
+    if(window.ethereum){
 
-    contract.str_out().then((res)=>{
-      console.log(res)
-    })
+      setMetamask(true)
 
-    provider.send("eth_requestAccounts", [])
-    .then((res)=>{
-      const signer = provider.getSigner();
-      setSigner(signer);
-      setAddress(res[0]);
-      setLoading(false)
-    })
-    .catch((err)=>{
-      console.log(err);
-    });
-  }, []);
+      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  
+      const contract = new ethers.Contract('0xf4395decdb4e1f0c3f0cb173cb83e68de631374c', abi, provider)
+  
+      contract.str_out().then((res)=>{
+        console.log(res)
+      })
+  
+      provider.send("eth_requestAccounts", [])
+      .then((res)=>{
+        const signer = provider.getSigner();
+        setSigner(signer);
+        setAddress(res[0]);
+        setLoading(false)
+      })
+      .catch((err)=>{
+        console.log(err);
+      });
+    }
+    else{
+      setMetamask(false)
+    }
+  }, [window.ethereum]);
   
 
   return (
     <ChakraProvider>
+      <Alert metamask={metamask} />
       <div className={pageState === 'home' ? 'background' : 'background-two'} ></div>
       <div className='scroll-container' >
-        <Navbar address={address} loading={loading} pageState={pageState} setPageState={setPageState} />
+        <Navbar address={address} loading={loading} metamask={metamask} pageState={pageState} setPageState={setPageState} />
         <Divider/>
         {
           pageState==='createCampaign'
