@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Heading, Text, Table, Thead, Tbody, Tr, Th, Td, TableCaption, TableContainer, } from '@chakra-ui/react'
 import { MdArrowBack } from 'react-icons/md'
 
-function ViewRequest({ setPageState }) {
+function ViewRequest({ setPageState, campaign }) {
   return (
     <div className='requests-container' >
         <div onClick={() => {
@@ -11,7 +11,7 @@ function ViewRequest({ setPageState }) {
             <MdArrowBack color='tomato'/>
             <Text color='tomato' fontWeight='bold'>Go Back</Text>
         </div>
-        <Heading style={{ marginBottom: '2%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >Withdrawal Requests <Text color='#0000006e' >3.12 ETH ($4231)</Text> </Heading>
+        <Heading style={{ marginBottom: '2%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >Withdrawal Requests <Text color='#0000006e' >{campaign.balance} ETH (${campaign.balance * 1660})</Text> </Heading>
         <Text fontSize='2xl' style={{ marginBottom: '5%' }} >Forest Conservation Fund</Text>
 
         <TableContainer>

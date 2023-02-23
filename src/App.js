@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { ethers } from 'ethers';
-import { ChakraProvider, Divider, Heading, scroll } from '@chakra-ui/react';
+import { ChakraProvider, Divider, Heading } from '@chakra-ui/react';
 import Navbar from './components/Navbar';
 import Header from './components/Header';
 import Stats from './components/Stats';
@@ -26,16 +26,168 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [pageState, setPageState] = useState('home')
 
+  const [campaignsLoading, setCampaignsLoading] = useState(true)
+  const [campaignIndex, setCampaignIndex] = useState(0)
+
   const [metamask, setMetamask] = useState(true)
 
   const scrollTop = useRef()
 
-  const [abi, setabi] = useState([
+  const abi = [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "minimum",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "target",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "url",
+          "type": "string"
+        }
+      ],
+      "name": "createCampaign",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "deployedCampaigns",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getDeployedCampaigns",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
+
+  const campaignAbi = [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "approveRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "contribute",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
     {
       "inputs": [
         {
           "internalType": "string",
-          "name": "str_in",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable",
+          "name": "recipient",
+          "type": "address"
+        }
+      ],
+      "name": "createRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "finalizeRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "minimum",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "creator",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "target",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "url",
           "type": "string"
         }
       ],
@@ -43,19 +195,186 @@ function App() {
       "type": "constructor"
     },
     {
-      "inputs": [],
-      "name": "str_out",
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "approvers",
       "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "approversCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getRequestsCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSummary",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
         {
           "internalType": "string",
           "name": "",
           "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "manager",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minimumContribution",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pool",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "requests",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address payable",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "complete",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "approvalCount",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
       "type": "function"
     }
-  ])
+  ]
+
+  const [campaignFactory, setCampaignFactory] = useState()
+
+  const [allCampaigns, setAllCampaigns] = useState([])
 
   useEffect(() => {
 
@@ -65,11 +384,47 @@ function App() {
 
       const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   
-      const contract = new ethers.Contract('0xf4395decdb4e1f0c3f0cb173cb83e68de631374c', abi, provider)
+      const contract = new ethers.Contract('0x548e19de1168d7439bca9262364a0fdc62443e01', abi, provider)
+
+      setCampaignFactory(contract)
   
-      contract.str_out().then((res)=>{
-        console.log(res)
+      
+      contract.getDeployedCampaigns().then((res)=>{
+
+        let allActiveCampaigns = []
+
+        res.map((add, index) => {
+
+          const campaignContract = new ethers.Contract(add, campaignAbi, provider)
+
+          campaignContract.getSummary().then((res) => { 
+
+            allActiveCampaigns.push({
+              minContri: res[0].toNumber(),
+              balance:res[1].toNumber(),
+              reqLength: res[2].toNumber(),
+              appCount: res[3].toNumber(),
+              manager: res[4],
+              title: res[5],
+              desc: res[6],
+              url: res[7],
+              targetAmt: res[8].toNumber(),
+              address: add,
+              contract: campaignContract,
+              index: index
+            })
+
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        })
+        setAllCampaigns(allActiveCampaigns)
+        // setAllCampaigns([...allActiveCampaigns])
+        setCampaignsLoading(false)
+
       })
+      .catch(err => console.log(err))
   
       provider.send("eth_requestAccounts", [])
       .then((res)=>{
@@ -81,11 +436,12 @@ function App() {
       .catch((err)=>{
         console.log(err);
       });
+
     }
     else{
       setMetamask(false)
     }
-  }, [window.ethereum]);
+  }, []);
 
   useEffect(() => {
     scrollTop.current.scrollTo(0, 0)
@@ -104,7 +460,7 @@ function App() {
           pageState==='createCampaign'
           ?
           (
-            <CreateCampaign setPageState={setPageState} />
+            <CreateCampaign setPageState={setPageState} campaignFactory={campaignFactory} signer={signer} />
           )
           :
           null
@@ -118,9 +474,9 @@ function App() {
               <Header setPageState={setPageState} />
               <div className='design' ></div>
             </div>
-            <Stats/>
+            <Stats allCampaigns={allCampaigns} />
             <Heading fontSize='4xl' color={'white'} style={{ width:'23%', margin: '5%', marginBottom: '2%', marginTop: '8%' , display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} ><TbLayersLinked/> Active Campaigns</Heading>
-            <CardsContainer setPageState={setPageState} />
+            <CardsContainer loading={campaignsLoading} setPageState={setPageState} allCampaigns={allCampaigns} setCampaignIndex={setCampaignIndex} />
             <Heading id='howitworks' fontSize='4xl' color={'white'} style={{ width:'21%', margin: '5%', marginBottom: '2%', marginTop: '8%' , display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} ><BiShowAlt/> How FTC Works</Heading>
             <Working/>
             </>
@@ -132,7 +488,7 @@ function App() {
           pageState === 'campaign'
           ?
           (
-            <CampaignPage setPageState={setPageState} />
+            <CampaignPage setPageState={setPageState} campaign={allCampaigns[campaignIndex]} currentAdd={address} />
           )
           :
           null
@@ -141,7 +497,7 @@ function App() {
           pageState === 'createRequest'
           ?
           (
-            <CreateRequest setPageState={setPageState} />
+            <CreateRequest setPageState={setPageState} campaign={allCampaigns[campaignIndex]} signer={signer} />
           )
           :
           null
@@ -150,7 +506,7 @@ function App() {
           pageState === 'viewRequest'
           ?
           (
-            <ViewRequest setPageState={setPageState} />
+            <ViewRequest setPageState={setPageState} campaign={allCampaigns[campaignIndex]} />
           )
           :
           null

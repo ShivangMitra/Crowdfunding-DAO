@@ -3,7 +3,7 @@ import { Button, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input
 import { MdArrowBack } from 'react-icons/md'
 import { AiFillPlusCircle } from 'react-icons/ai'
 
-function CreateRequest({ setPageState }) {
+function CreateRequest({ setPageState, campaign, signer }) {
 
     const [input, setInput] = useState({
         reqDesc: null,
@@ -14,6 +14,11 @@ function CreateRequest({ setPageState }) {
     const errorReqDesc = input.reqDesc === ''
     const errorAmt = input.amt === ''
     const errorAdd = input.add === ''
+
+    const handleCreateRequest = () => {
+        const signedContract = campaign.contract.connect(signer)
+        signedContract.createRequest(input.reqDesc, input.amt, input.add)
+    }
 
   return (
     <div className='form-container' >
@@ -71,7 +76,7 @@ function CreateRequest({ setPageState }) {
                     <FormErrorMessage >Wallet Address is required.</FormErrorMessage>
                 )}
         </FormControl>
-        <Button style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
+        <Button onClick={handleCreateRequest} style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
     </div>
   )
 }

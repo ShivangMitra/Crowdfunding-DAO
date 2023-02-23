@@ -8,13 +8,13 @@ import {
   } from '@chakra-ui/react'
 import { FaEthereum } from 'react-icons/fa'
 
-function Stats() {
+function Stats({ allCampaigns }) {
   return (
     <div className='stats' >
         <Text fontSize='4xl' color='white' >Bring a creative project to life.</Text>
         <div className='stats-items' >
             <Stat className='stats-item'>
-                <StatNumber>0</StatNumber>
+                <StatNumber>{allCampaigns.length}</StatNumber>
                 <StatLabel>Projects Funded</StatLabel>
                 {/* <StatHelpText>Feb 12 - Feb 28</StatHelpText> */}
             </Stat>

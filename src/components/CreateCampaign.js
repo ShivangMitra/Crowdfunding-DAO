@@ -3,12 +3,12 @@ import { Button, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input
 import { MdArrowBack } from 'react-icons/md'
 import { AiFillPlusCircle } from 'react-icons/ai'
 
-function CreateCampaign({ setPageState }) {
-
+function CreateCampaign({ setPageState, campaignFactory, signer }) {
+ 
     const handleHome = () => {
         setPageState('home')
-        }
-
+    }
+    
     const [input, setInput] = useState({
         minContri: null,
         name: null,
@@ -16,6 +16,11 @@ function CreateCampaign({ setPageState }) {
         url: null,
         targetAmt: null
     })
+    
+    const handleCreate = () => {
+        const campaignFactorySigner = campaignFactory.connect(signer)
+        campaignFactorySigner.createCampaign(input.minContri, input.name, input.desc, input.targetAmt, input.url)
+    }
 
     const errorMinContri = input.minContri === ''
     const errorName = input.name === ''
@@ -109,7 +114,7 @@ function CreateCampaign({ setPageState }) {
                     <FormErrorMessage >Target amount is required.</FormErrorMessage>
                 )}
         </FormControl>
-        <Button style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
+        <Button onClick={handleCreate} style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
     </div>
   )
 }

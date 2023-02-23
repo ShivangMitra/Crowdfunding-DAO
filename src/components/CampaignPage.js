@@ -5,27 +5,27 @@ import { BiDonateHeart } from 'react-icons/bi'
 import { BsFillPeopleFill, BsFillChatSquareQuoteFill } from 'react-icons/bs'
 import { FaAddressCard } from 'react-icons/fa'
 
-function CampaignPage({ setPageState }) {
+function CampaignPage({ setPageState, campaign, currentAdd }) {
 
   const data = {
     minContri: {
       dis: 'Minimum Contribution',
-      val: '0.001 ETH ($2.75)',
+      val: `${campaign.minContri} ETH ($${campaign.minContri * 1660})`,
       icon: (<BiDonateHeart color='#ff634780' fontSize='300%' style={{ marginRight: '5%' }} />)
     },
     add: {
       dis: 'Wallet Address of Campaign Creator',
-      val: '0x369be63C2601CD1D332593ffA435c130460700b9',
+      val: campaign.manager,
       icon: (<FaAddressCard color='#ff634780' fontSize='300%' style={{ marginRight: '5%' }} />)
     },
     req: {
       dis: 'Number of Requests',
-      val: '5',
+      val: campaign.reqLength,
       icon: (<BsFillChatSquareQuoteFill color='#ff634780' fontSize='300%' style={{ marginRight: '5%' }} />)
     },
     app: {
       dis: 'Number of Approvers',
-      val: '3',
+      val: campaign.appCount,
       icon: (<BsFillPeopleFill color='#ff634780' fontSize='300%' style={{ marginRight: '5%' }} />)
     },
   }
@@ -34,8 +34,8 @@ function CampaignPage({ setPageState }) {
     <div className='campaign-page-container' >
       <div className='campaign-page-left' >
         <div className='campaign-heading' >
-          <Heading marginBottom='2%' >Forest Conservation Fund</Heading>
-          <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dapibus purus in arcu pulvinar, eu fermentum ipsum convallis. Proin ut arcu sit amet massa dignissim molestie. Vestibulum efficitur, lorem vel ullamcorper euismod, quam justo sagittis mi, sed finibus risus ipsum ut sapien. Quisque eu quam lacinia, elementum mi quis, pellentesque orci. Ut fermentum lacinia felis non pharetra. Quisque laoreet elit quis ipsum volutpat viverra. Praesent malesuada, neque sed congue interdum, dui libero venenatis tellus, eget rhoncus nulla ligula sit amet dui. Mauris fermentum neque vitae molestie porta. Fusce bibendum, augue vehicula blandit pharetra, justo ipsum scelerisque urna, eget commodo nibh orci aliquet arcu. Suspendisse varius ultricies tellus, quis euismod mauris efficitur eu.</Text>
+          <Heading marginBottom='2%' >{campaign.title}</Heading>
+          <Text>{campaign.desc}</Text>
         </div>
           {
             Object.keys(data).map(item => (
@@ -55,16 +55,16 @@ function CampaignPage({ setPageState }) {
         <Card style={{ marginBottom: '3%' }} >
           <CardBody>
             <Text fontSize='xs' style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '27%' }} >Campaign Balance <AiFillInfoCircle color='tomato' /> </Text>
-            <Text fontSize='xl' fontWeight='bold' display='flex' >3.12 ETH <Text color='#ff634791' margin='0% 2%' >($1234)</Text> </Text>
-            <Text display='flex' >target of 12 ETH <Text color='#00000082' margin='0% 2%' >($3452)</Text></Text>
-            <Progress value={25} size='xs' colorScheme='orange' marginTop='2%' />
+            <Text fontSize='xl' fontWeight='bold' display='flex' >{campaign.balance} ETH <Text color='#ff634791' margin='0% 2%' >(${campaign.balance * 1660})</Text> </Text>
+            <Text display='flex' >target of {campaign.targetAmt} ETH <Text color='#00000082' margin='0% 2%' >(${campaign.targetAmt * 1660})</Text></Text>
+            <Progress value={(campaign.balance / campaign.targetAmt) * 100} size='xs' colorScheme='orange' marginTop='2%' />
           </CardBody>
         </Card>
         <Card style={{ backgroundColor: '#effbed', marginBottom: '3%' }} >
           <CardBody>
             <Heading color='#29da2e' marginBottom='2%' >Contribute Now!</Heading>
             <InputGroup>
-              <Input type='number' placeholder='0.01' />
+              <Input type='number' placeholder={campaign.minContri} />
               <InputRightAddon children='ETH' backgroundColor='#29da2e' color='white' />
             </InputGroup>
             <Button style={{ width: '100%', marginTop: '5%' }} colorScheme='green' backgroundColor={'#29da2e'} leftIcon={<BiDonateHeart />} >Contribute</Button>
@@ -93,29 +93,37 @@ function CampaignPage({ setPageState }) {
             <Text> You can see where these funds are being used & if you have contribute you can also approve Withdrawal Requests.</Text>
           </CardBody>
         </Card>
-        <Card style={{ marginBottom: '3%' }} >
-          <CardBody>
-          <Box
-              onClick={() => {
-                setPageState('createRequest')
-              }}
-              width='100%'
-              as='button'
-              p={4}
-              color='white'
-              fontWeight='bold'
-              borderRadius='md'
-              bgGradient='linear(to-r, red.500, yellow.500)'
-              _hover={{
-                bgGradient: 'linear(to-r, teal.500, green.500)',
-              }}
-              marginBottom='2%'
-            >
-              Create Withdrawal Requests
-            </Box>
-            <Text> Hey 0x392...02b create a Withdarwal Request, take your project to new heights.</Text>
-          </CardBody>
-        </Card>
+        {
+          campaign.manager.toUpperCase() === currentAdd.toUpperCase()
+          ?
+          (
+            <Card style={{ marginBottom: '3%' }} >
+              <CardBody>
+              <Box
+                  onClick={() => {
+                    setPageState('createRequest')
+                  }}
+                  width='100%'
+                  as='button'
+                  p={4}
+                  color='white'
+                  fontWeight='bold'
+                  borderRadius='md'
+                  bgGradient='linear(to-r, red.500, yellow.500)'
+                  _hover={{
+                    bgGradient: 'linear(to-r, teal.500, green.500)',
+                  }}
+                  marginBottom='2%'
+                >
+                  Create Withdrawal Requests
+                </Box>
+                <Text> Hey {currentAdd.substring(0,5)+'...'+currentAdd.substring(currentAdd.length-4)} create a Withdarwal Request, take your project to new heights.</Text>
+              </CardBody>
+            </Card>
+          )
+          :
+          null
+        }
       </div>
     </div>
   )
