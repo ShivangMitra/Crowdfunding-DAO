@@ -1,8 +1,41 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Button, Heading, Text, Table, Thead, Tbody, Tr, Th, Td, TableCaption, TableContainer, } from '@chakra-ui/react'
 import { MdArrowBack } from 'react-icons/md'
 
-function ViewRequest({ setPageState, campaign }) {
+function ViewRequest({ setPageState, campaign, currentAdd, signer }) {
+    
+    const [loading, setLoading] = useState(true)
+    const [requestsData, setRequestsData] = useState([])
+
+    useEffect(() => {
+
+      for(let i=0;i<campaign.reqLength;i++){
+        campaign.contract.requests(i).then(res => {
+            setRequestsData([...requestsData, {
+                desc: res[0],
+                amt: res[1].toNumber(),
+                recipient: res[2],
+                completed: res[3],
+                approvalCount: res[4].toNumber(),
+                index: i
+            }])
+        })
+        .catch(err=>console.log(err))
+    }
+      setLoading(false)
+    }, [])
+
+    function approveReq(id){
+        const signedContract = campaign.contract.connect(signer)
+        signedContract.approveRequest(id)
+    }
+
+    function finalizeReq(id){
+        const signedContract = campaign.contract.connect(signer)
+        signedContract.finalizeRequest(id)
+    }
+    
+
   return (
     <div className='requests-container' >
         <div onClick={() => {
@@ -25,62 +58,61 @@ function ViewRequest({ setPageState, campaign }) {
                         <Th>WALLET ADDRESS</Th>
                         <Th>APPROVAL COUNT</Th>
                         <Th>APPROVE</Th>
-                        <Th>FINALIZE</Th>
+                        {
+                            campaign.manager.toUpperCase() === currentAdd.toUpperCase()
+                            ?
+                            (
+                                <Th>FINALIZE</Th>
+                            )
+                            :
+                            null
+                        }
                     </Tr>
                 </Thead>
                 <Tbody>
-                    <Tr>
-                        <Td>0</Td>
-                        <Td>Fire damage recovery.</Td>
-                        <Td>0.11ETH</Td>
-                        <Td>0x5d7...02b</Td>
-                        <Td>1/3</Td>
-                        <Td>
-                            <Button colorScheme='orange' variant='outline' >Approve</Button>
-                        </Td>
-                        <Td>
-                            <Button colorScheme='green' variant='outline' >Finalize</Button>
-                        </Td>
-                    </Tr>
-                    <Tr>
-                        <Td>1</Td>
-                        <Td>Fire damage recovery.</Td>
-                        <Td>0.11ETH</Td>
-                        <Td>0x5d7...02b</Td>
-                        <Td>1/3</Td>
-                        <Td>
-                            <Button colorScheme='orange' variant='outline' >Approve</Button>
-                        </Td>
-                        <Td>
-                            <Button colorScheme='green' variant='outline' >Finalize</Button>
-                        </Td>
-                    </Tr>
-                    <Tr>
-                        <Td>2</Td>
-                        <Td>Fire damage recovery.</Td>
-                        <Td>0.11ETH</Td>
-                        <Td>0x5d7...02b</Td>
-                        <Td>1/3</Td>
-                        <Td>
-                            <Button colorScheme='orange' variant='outline' >Approve</Button>
-                        </Td>
-                        <Td>
-                            <Button colorScheme='green' variant='outline' >Finalize</Button>
-                        </Td>
-                    </Tr>
-                    <Tr>
-                        <Td>3</Td>
-                        <Td>Fire damage recovery.</Td>
-                        <Td>0.11ETH</Td>
-                        <Td>0x5d7...02b</Td>
-                        <Td>1/3</Td>
-                        <Td>
-                            <Button colorScheme='orange' variant='outline' >Approve</Button>
-                        </Td>
-                        <Td>
-                            <Button colorScheme='green' variant='outline' >Finalize</Button>
-                        </Td>
-                    </Tr>
+                    {
+                        loading
+                        ?
+                        (
+                            <Tr>
+                                <Td>0</Td>
+                                <Td>-</Td>
+                                <Td>-ETH</Td>
+                                <Td>-</Td>
+                                <Td>-</Td>
+                                <Td>
+                                    <Button colorScheme='orange' variant='outline' >Approve</Button>
+                                </Td>
+                                <Td>
+                                    <Button colorScheme='green' variant='outline' >Finalize</Button>
+                                </Td>
+                            </Tr>
+                        )
+                        :
+                        requestsData.map((request, id) => (
+                            <Tr>
+                                <Td>{request.index}</Td>
+                                <Td>{request.desc}</Td>
+                                <Td>{`${request.amt} ETH`}</Td>
+                                <Td>{request.recipient.substring(0,5)+'...'+request.recipient.substring(request.recipient.length-4)}</Td>
+                                <Td>{request.approvalCount}/{campaign.appCount}</Td>
+                                <Td>
+                                    <Button onClick={() => approveReq(id)} colorScheme='orange' variant='outline' >Approve</Button>
+                                </Td>
+                                {
+                                    campaign.manager.toUpperCase() === currentAdd.toUpperCase()
+                                    ?
+                                    (
+                                        <Td>
+                                            <Button onClick={() => finalizeReq(id)} colorScheme='green' variant='outline' >Finalize</Button>
+                                        </Td>
+                                    )
+                                    :
+                                    null
+                                }
+                            </Tr>
+                        ))
+                    }
                 </Tbody>
             </Table>
         </TableContainer>

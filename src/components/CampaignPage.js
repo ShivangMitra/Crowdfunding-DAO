@@ -1,11 +1,19 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Button, Heading, Text, Card, CardBody, Progress, InputGroup, Input, InputRightAddon, Box } from '@chakra-ui/react'
 import { AiFillInfoCircle } from 'react-icons/ai'
 import { BiDonateHeart } from 'react-icons/bi'
 import { BsFillPeopleFill, BsFillChatSquareQuoteFill } from 'react-icons/bs'
 import { FaAddressCard } from 'react-icons/fa'
+import { ethers } from 'ethers'
 
-function CampaignPage({ setPageState, campaign, currentAdd }) {
+function CampaignPage({ setPageState, campaign, currentAdd, signer }) {
+
+  const [contribution, setContribution] = useState('')
+
+  const handleContribution = () => {
+    const signedContract = campaign.contract.connect(signer)
+    signedContract.contribute({value: ethers.utils.parseUnits(contribution, "wei")})
+  }
 
   const data = {
     minContri: {
@@ -64,10 +72,10 @@ function CampaignPage({ setPageState, campaign, currentAdd }) {
           <CardBody>
             <Heading color='#29da2e' marginBottom='2%' >Contribute Now!</Heading>
             <InputGroup>
-              <Input type='number' placeholder={campaign.minContri} />
+              <Input type='number' placeholder={campaign.minContri} onChange={(e) => {setContribution(e.target.value)}} />
               <InputRightAddon children='ETH' backgroundColor='#29da2e' color='white' />
             </InputGroup>
-            <Button style={{ width: '100%', marginTop: '5%' }} colorScheme='green' backgroundColor={'#29da2e'} leftIcon={<BiDonateHeart />} >Contribute</Button>
+            <Button onClick={handleContribution} style={{ width: '100%', marginTop: '5%' }} colorScheme='green' backgroundColor={'#29da2e'} leftIcon={<BiDonateHeart />} >Contribute</Button>
           </CardBody>
         </Card>
         <Card style={{ marginBottom: '3%' }} >

@@ -391,15 +391,13 @@ function App() {
       
       contract.getDeployedCampaigns().then((res)=>{
 
-        let allActiveCampaigns = []
-
         res.map((add, index) => {
 
           const campaignContract = new ethers.Contract(add, campaignAbi, provider)
 
-          campaignContract.getSummary().then((res) => { 
+          campaignContract.getSummary().then((res) => {
 
-            allActiveCampaigns.push({
+            setAllCampaigns([...allCampaigns, {
               minContri: res[0].toNumber(),
               balance:res[1].toNumber(),
               reqLength: res[2].toNumber(),
@@ -412,15 +410,14 @@ function App() {
               address: add,
               contract: campaignContract,
               index: index
-            })
+            }])
 
           })
           .catch(err => {
             console.log(err)
           })
         })
-        setAllCampaigns(allActiveCampaigns)
-        // setAllCampaigns([...allActiveCampaigns])
+        
         setCampaignsLoading(false)
 
       })
@@ -488,7 +485,7 @@ function App() {
           pageState === 'campaign'
           ?
           (
-            <CampaignPage setPageState={setPageState} campaign={allCampaigns[campaignIndex]} currentAdd={address} />
+            <CampaignPage setPageState={setPageState} campaign={allCampaigns[campaignIndex]} currentAdd={address} signer={signer} />
           )
           :
           null
@@ -506,7 +503,7 @@ function App() {
           pageState === 'viewRequest'
           ?
           (
-            <ViewRequest setPageState={setPageState} campaign={allCampaigns[campaignIndex]} />
+            <ViewRequest setPageState={setPageState} campaign={allCampaigns[campaignIndex]} currentAdd={address} signer={signer} />
           )
           :
           null
