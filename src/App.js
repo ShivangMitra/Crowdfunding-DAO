@@ -391,13 +391,14 @@ function App() {
       
       contract.getDeployedCampaigns().then((res)=>{
 
-        res.map((add, index) => {
+        const ResLength = res.length
 
+        res.map((add, index) => {
           const campaignContract = new ethers.Contract(add, campaignAbi, provider)
 
           campaignContract.getSummary().then((res) => {
 
-            setAllCampaigns([...allCampaigns, {
+            let data = {
               minContri: res[0].toNumber(),
               balance:res[1].toNumber(),
               reqLength: res[2].toNumber(),
@@ -410,8 +411,13 @@ function App() {
               address: add,
               contract: campaignContract,
               index: index
-            }])
+            }
+            
+            if(!allCampaigns.includes(data) && allCampaigns.length < ResLength){
+              allCampaigns.push(data)
+            }
 
+            setAllCampaigns([...allCampaigns])
           })
           .catch(err => {
             console.log(err)
