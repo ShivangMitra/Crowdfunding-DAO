@@ -3,7 +3,7 @@ import { Heading, Text } from '@chakra-ui/react'
 import { MdArrowBack } from 'react-icons/md'
 import ReqCampaignCard from './ReqCampaignCard'
 
-function ViewRequests({ setPageState }) {
+function ViewRequests({ setPageState, donatedCampaigns, setCampaignIndex }) {
 
     const handleHome = () => {
         setPageState('home')
@@ -18,10 +18,11 @@ function ViewRequests({ setPageState }) {
 
         <Heading style={{ marginBottom: '5%' }} >Fund Requests <Text color='#0000005e' fontSize='ig' >Campaigns you have donated to</Text></Heading>
 
-        <ReqCampaignCard setPageState={setPageState} />
-        <ReqCampaignCard setPageState={setPageState} />
-        <ReqCampaignCard setPageState={setPageState} />
-        <ReqCampaignCard setPageState={setPageState} />
+        {
+          donatedCampaigns.map((camp, key) => (
+            <ReqCampaignCard key={key} setPageState={setPageState} setCampaignIndex={setCampaignIndex} camp={camp} />
+          ))
+        }
     </div>
   )
 }

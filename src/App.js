@@ -376,6 +376,10 @@ function App() {
 
   const [allCampaigns, setAllCampaigns] = useState([])
 
+  const [managerCampaigns, setManagerCampaigns] = useState([])
+
+  const [donatedCampaigns, setDonatedCampaigns] = useState([])
+
   useEffect(() => {
 
     if(window.ethereum){
@@ -387,59 +391,72 @@ function App() {
       const contract = new ethers.Contract('0x548e19de1168d7439bca9262364a0fdc62443e01', abi, provider)
 
       setCampaignFactory(contract)
-  
-      
-      contract.getDeployedCampaigns().then((res)=>{
 
-        const ResLength = res.length
-
-        res.map((add, index) => {
-          const campaignContract = new ethers.Contract(add, campaignAbi, provider)
-
-          campaignContract.getSummary().then((res) => {
-
-            let data = {
-              minContri: res[0].toNumber(),
-              balance:res[1].toNumber(),
-              reqLength: res[2].toNumber(),
-              appCount: res[3].toNumber(),
-              manager: res[4],
-              title: res[5],
-              desc: res[6],
-              url: res[7],
-              targetAmt: res[8].toNumber(),
-              address: add,
-              contract: campaignContract,
-              index: index
-            }
-            
-            if(!allCampaigns.includes(data) && allCampaigns.length < ResLength){
-              allCampaigns.push(data)
-            }
-
-            setAllCampaigns([...allCampaigns])
-          })
-          .catch(err => {
-            console.log(err)
-          })
-        })
-        
-        setCampaignsLoading(false)
-
-      })
-      .catch(err => console.log(err))
-  
       provider.send("eth_requestAccounts", [])
-      .then((res)=>{
+      .then((signerRes)=>{
         const signer = provider.getSigner();
         setSigner(signer);
-        setAddress(res[0]);
+        setAddress(signerRes[0]);
         setLoading(false)
-      })
-      .catch((err)=>{
-        console.log(err);
-      });
 
+
+        contract.getDeployedCampaigns().then((depCampaigns)=>{
+  
+          depCampaigns.map((add, index) => {
+            const campaignContract = new ethers.Contract(add, campaignAbi, provider)
+
+            
+            
+            campaignContract.getSummary().then((res) => {
+              let approver
+              
+              campaignContract.approvers(signerRes[0]).then(approval => {
+                approver = approval
+
+                let data = {
+                  minContri: res[0].toNumber(),
+                  balance:res[1].toNumber(),
+                  reqLength: res[2].toNumber(),
+                  appCount: res[3].toNumber(),
+                  manager: res[4],
+                  title: res[5],
+                  desc: res[6],
+                  url: res[7],
+                  targetAmt: res[8].toNumber(),
+                  address: add,
+                  contract: campaignContract,
+                  index: index
+                }
+                
+                if(!allCampaigns.find(camp => camp.address === data.address)){
+                  allCampaigns.push(data)
+                }
+  
+                if(!managerCampaigns.find(camp => camp.address === data.address) && (data.manager.toUpperCase() === signerRes[0].toUpperCase())){
+                  managerCampaigns.push(data)
+                }
+  
+                if(!donatedCampaigns.find(camp => camp.address === data.address) && approver){
+                  donatedCampaigns.push(data)
+                }
+    
+                setAllCampaigns([...allCampaigns])
+                setManagerCampaigns([...managerCampaigns])
+              })
+              .catch(err=>console.log(err))
+            })
+            .catch(err => {
+              console.log(err)
+            })
+          })
+          
+          setCampaignsLoading(false)
+  
+        })
+        .catch(err => console.log(err))
+
+      })
+      .catch(err=>{console.log(err)});
     }
     else{
       setMetamask(false)
@@ -491,7 +508,7 @@ function App() {
           pageState === 'campaign'
           ?
           (
-            <CampaignPage setPageState={setPageState} campaign={allCampaigns[campaignIndex]} currentAdd={address} signer={signer} />
+            <CampaignPage setPageState={setPageState} campaign={allCampaigns.find(camp => camp.index === campaignIndex)} currentAdd={address} signer={signer} />
           )
           :
           null
@@ -500,7 +517,7 @@ function App() {
           pageState === 'createRequest'
           ?
           (
-            <CreateRequest setPageState={setPageState} campaign={allCampaigns[campaignIndex]} signer={signer} />
+            <CreateRequest setPageState={setPageState} campaign={allCampaigns.find(camp => camp.index === campaignIndex)} signer={signer} />
           )
           :
           null
@@ -509,7 +526,7 @@ function App() {
           pageState === 'viewRequest'
           ?
           (
-            <ViewRequest setPageState={setPageState} campaign={allCampaigns[campaignIndex]} currentAdd={address} signer={signer} />
+            <ViewRequest setPageState={setPageState} campaign={allCampaigns.find(camp => camp.index === campaignIndex)} currentAdd={address} signer={signer} />
           )
           :
           null
@@ -527,7 +544,7 @@ function App() {
           pageState === 'myCampaigns'
           ?
           (
-            <MyCampaigns setPageState={setPageState} />
+            <MyCampaigns setPageState={setPageState} managerCampaigns={managerCampaigns} setCampaignIndex={setCampaignIndex} />
           )
           :
           null
@@ -536,7 +553,7 @@ function App() {
           pageState === 'viewRequests'
           ?
           (
-            <ViewRequests setPageState={setPageState} />
+            <ViewRequests setPageState={setPageState} donatedCampaigns={donatedCampaigns} setCampaignIndex={setCampaignIndex} />
           )
           :
           null

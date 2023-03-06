@@ -49,7 +49,7 @@ function ViewRequest({ setPageState, campaign, currentAdd, signer }) {
 
         <TableContainer>
             <Table variant='striped' colorScheme='orange'>
-                <TableCaption>Found 4 Requests</TableCaption>
+                <TableCaption>Found {requestsData.length} Requests</TableCaption>
                 <Thead>
                     <Tr>
                         <Th>ID</Th>
@@ -90,7 +90,7 @@ function ViewRequest({ setPageState, campaign, currentAdd, signer }) {
                         )
                         :
                         requestsData.map((request, id) => (
-                            <Tr>
+                            <Tr key={id}>
                                 <Td>{request.index}</Td>
                                 <Td>{request.desc}</Td>
                                 <Td>{`${request.amt} ETH`}</Td>

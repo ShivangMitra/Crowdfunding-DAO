@@ -46,8 +46,8 @@ function CampaignPage({ setPageState, campaign, currentAdd, signer }) {
           <Text>{campaign.desc}</Text>
         </div>
           {
-            Object.keys(data).map(item => (
-              <Card style={{ margin: '1% 0%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection:'inherit' }} key={data[item.dis]} >
+            Object.keys(data).map((item, key) => (
+              <Card style={{ margin: '1% 0%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection:'inherit' }} key={key} >
                 <CardBody>
                   <Text>{data[item].dis}</Text>
                   <Text fontWeight='bold' >{data[item].val}</Text>
