@@ -2,27 +2,44 @@ import React, {useEffect, useState} from 'react'
 import { Button, Heading, Text, Table, Thead, Tbody, Tr, Th, Td, TableCaption, TableContainer, } from '@chakra-ui/react'
 import { MdArrowBack } from 'react-icons/md'
 
-function ViewRequest({ setPageState, campaign, currentAdd, signer }) {
+function ViewRequest({ setPageState, campaign, currentAdd, signer, weiToEther }) {
     
     const [loading, setLoading] = useState(true)
     const [requestsData, setRequestsData] = useState([])
 
     useEffect(() => {
 
-      for(let i=0;i<campaign.reqLength;i++){
-        campaign.contract.requests(i).then(res => {
-            setRequestsData([...requestsData, {
-                desc: res[0],
-                amt: res[1].toNumber(),
-                recipient: res[2],
-                completed: res[3],
-                approvalCount: res[4].toNumber(),
-                index: i
-            }])
-        })
-        .catch(err=>console.log(err))
-    }
-      setLoading(false)
+        const getRequestsData = async () => {
+            try{
+
+                const requestsData = []
+
+                for(let i=0;i<campaign.reqLength;i++){
+                    const res = await campaign.contract.requests(i)
+
+                    console.log(res)
+        
+                    requestsData.push({
+                        desc: res[0],
+                        amt: res[1].toNumber(),
+                        recipient: res[2],
+                        completed: res[3],
+                        approvalCount: res[4].toNumber(),
+                        index: i
+                    })
+                }
+
+                setRequestsData(requestsData)
+            }
+            catch(error){
+                console.log(error)
+            }
+            finally{
+                setLoading(false)
+            }
+        }
+
+        getRequestsData()
     }, [])
 
     function approveReq(id){
@@ -44,8 +61,8 @@ function ViewRequest({ setPageState, campaign, currentAdd, signer }) {
             <MdArrowBack color='tomato'/>
             <Text color='tomato' fontWeight='bold'>Go Back</Text>
         </div>
-        <Heading style={{ marginBottom: '2%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >Withdrawal Requests <Text color='#0000006e' >{campaign.balance} ETH (${campaign.balance * 1660})</Text> </Heading>
-        <Text fontSize='2xl' style={{ marginBottom: '5%' }} >Forest Conservation Fund</Text>
+        <Heading style={{ marginBottom: '2%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >Withdrawal Requests <Text color='#0000006e' >{weiToEther(campaign.balance)} ETH (${weiToEther(campaign.balance * 1660)})</Text> </Heading>
+        <Text fontSize='2xl' style={{ marginBottom: '5%' }} >{campaign.title}</Text>
 
         <TableContainer>
             <Table variant='striped' colorScheme='orange'>
@@ -93,7 +110,7 @@ function ViewRequest({ setPageState, campaign, currentAdd, signer }) {
                             <Tr key={id}>
                                 <Td>{request.index}</Td>
                                 <Td>{request.desc}</Td>
-                                <Td>{`${request.amt} ETH`}</Td>
+                                <Td>{`${weiToEther(request.amt)} ETH`}</Td>
                                 <Td>{request.recipient.substring(0,5)+'...'+request.recipient.substring(request.recipient.length-4)}</Td>
                                 <Td>{request.approvalCount}/{campaign.appCount}</Td>
                                 <Td>

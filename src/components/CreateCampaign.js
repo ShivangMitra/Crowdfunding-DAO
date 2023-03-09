@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import { Button, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Heading, Text, InputGroup, InputRightAddon, InputLeftAddon } from '@chakra-ui/react'
+import { Button, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Heading, Text, InputGroup, InputRightAddon, InputLeftAddon, Alert, AlertIcon, AlertTitle, AlertDescription } from '@chakra-ui/react'
 import { MdArrowBack } from 'react-icons/md'
 import { AiFillPlusCircle } from 'react-icons/ai'
 
-function CreateCampaign({ setPageState, campaignFactory, signer }) {
+function CreateCampaign({ setPageState, campaignFactory, signer, etherToWei }) {
  
     const handleHome = () => {
         setPageState('home')
@@ -15,18 +15,26 @@ function CreateCampaign({ setPageState, campaignFactory, signer }) {
         desc: null,
         url: null,
         targetAmt: null
-    })
+    }) 
     
-    const handleCreate = () => {
-        const campaignFactorySigner = campaignFactory.connect(signer)
-        campaignFactorySigner.createCampaign(input.minContri, input.name, input.desc, input.targetAmt, input.url)
-    }
-
     const errorMinContri = input.minContri === ''
     const errorName = input.name === ''
     const errorDesc = input.desc === ''
     const errorUrl = input.url === ''
     const errorTarget = input.targetAmt === ''
+    
+    const [alertState, setAlertState] = useState(false)
+    
+    const handleCreate = () => {
+        if((etherToWei(input.minContri) <= 0) || (etherToWei(input.targetAmt) <= 0)){
+            setAlertState(true)
+            return
+        }
+        setAlertState(false)
+
+        const campaignFactorySigner = campaignFactory.connect(signer)
+        campaignFactorySigner.createCampaign(etherToWei(input.minContri), input.name, input.desc, etherToWei(input.targetAmt), input.url)
+    }
 
   return (
     <div className='form-container' >
@@ -114,6 +122,19 @@ function CreateCampaign({ setPageState, campaignFactory, signer }) {
                     <FormErrorMessage >Target amount is required.</FormErrorMessage>
                 )}
         </FormControl>
+        {
+            alertState
+            ?
+            (
+                <Alert status='error'>
+                    <AlertIcon />
+                    <AlertTitle>Amount is invalid!</AlertTitle>
+                    <AlertDescription>Please provide an amount greater than zero.</AlertDescription>
+                </Alert>
+            )
+            :
+            null
+        }
         <Button isActive={input.desc === null || input.minContri === null || input.name === null || input.targetAmt === null || input.url === null || errorDesc || errorMinContri || errorName || errorTarget || errorUrl} onClick={handleCreate} style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
     </div>
   )

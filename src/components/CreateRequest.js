@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import { Button, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Heading, Text, InputGroup, InputRightAddon } from '@chakra-ui/react'
+import { Button, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Heading, Text, InputGroup, InputRightAddon, Alert, AlertIcon, AlertTitle, AlertDescription } from '@chakra-ui/react'
 import { MdArrowBack } from 'react-icons/md'
 import { AiFillPlusCircle } from 'react-icons/ai'
 
-function CreateRequest({ setPageState, campaign, signer }) {
+function CreateRequest({ setPageState, campaign, signer, etherToWei }) {
 
     const [input, setInput] = useState({
         reqDesc: null,
@@ -15,9 +15,17 @@ function CreateRequest({ setPageState, campaign, signer }) {
     const errorAmt = input.amt === ''
     const errorAdd = input.add === ''
 
+    const [alertState, setAlertState] = useState(false)
+
     const handleCreateRequest = () => {
+        if(etherToWei(input.amt) <= 0){
+            setAlertState(true)
+            return
+        }
+        setAlertState(false)
+
         const signedContract = campaign.contract.connect(signer)
-        signedContract.createRequest(input.reqDesc, input.amt, input.add)
+        signedContract.createRequest(input.reqDesc, etherToWei(input.amt), input.add)
     }
 
   return (
@@ -76,6 +84,19 @@ function CreateRequest({ setPageState, campaign, signer }) {
                     <FormErrorMessage >Wallet Address is required.</FormErrorMessage>
                 )}
         </FormControl>
+        {
+            alertState
+            ?
+            (
+                <Alert status='error'>
+                    <AlertIcon />
+                    <AlertTitle>Amount is invalid!</AlertTitle>
+                    <AlertDescription>Please provide an amount greater than zero.</AlertDescription>
+                </Alert>
+            )
+            :
+            null
+        }
         <Button isActive={input.add === null || input.amt === null || input.reqDesc === null || errorAdd || errorAmt || errorReqDesc} onClick={handleCreateRequest} style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
     </div>
   )

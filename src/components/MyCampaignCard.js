@@ -3,7 +3,7 @@ import { Button, Heading, Text } from '@chakra-ui/react'
 import { Card, CardBody, Stack, Image, Progress } from '@chakra-ui/react'
 import { FaHandHoldingUsd, FaHandsHelping } from 'react-icons/fa'
 
-function MyCampaignCard({ setPageState, camp, setCampaignIndex }) {
+function MyCampaignCard({ setPageState, camp, setCampaignIndex, weiToEther }) {
 
     const handleCampaignPage = () => {
         setCampaignIndex(camp.index)
@@ -22,12 +22,12 @@ function MyCampaignCard({ setPageState, camp, setCampaignIndex }) {
             <CardBody style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '100%' }} >
                 <Heading size='md' style={{ display: 'flex', alignItems:'center', justifyContent: 'space-between' }} >{camp.title}<FaHandsHelping color={'tomato'} /></Heading>
                 <Text color='tomato' fontSize='2xl' style={{display: 'flex', justifyContent: 'space-between'}} >
-                    {camp.balance} ETH {`($${camp.balance * 1660})`}
+                    {weiToEther(camp.balance)} ETH {`($${weiToEther(camp.balance * 1660)})`}
                     <Button onClick={handleCampaignPage} variant='solid' colorScheme='orange' backgroundColor={'tomato'} rightIcon={<FaHandHoldingUsd/>}>
                     Check Status
                     </Button>
                 </Text>
-                <Text color={'#0000008a'} >Target of {camp.targetAmt} ETH {`($${camp.targetAmt * 1660})`}</Text>
+                <Text color={'#0000008a'} >Target of {weiToEther(camp.targetAmt)} ETH {`($${weiToEther(camp.targetAmt * 1660)})`}</Text>
                 <Progress value={(camp.balance / camp.targetAmt) * 100} size='xs' colorScheme='orange' />
             </CardBody>
             </Stack>
