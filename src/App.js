@@ -388,7 +388,8 @@ function App() {
 
       const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   
-      const contract = new ethers.Contract('0x548e19de1168d7439bca9262364a0fdc62443e01', abi, provider)
+      const contract = new ethers.Contract('0x75206dfc555fa4865111b774ce9f79fdd76954c0', abi, provider)
+      // const contract = new ethers.Contract('0x548e19de1168d7439bca9262364a0fdc62443e01', abi, provider)
 
       setCampaignFactory(contract)
 

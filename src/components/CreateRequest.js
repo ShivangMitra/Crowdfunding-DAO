@@ -30,7 +30,7 @@ function CreateRequest({ setPageState, campaign, signer }) {
         </div>
         <Heading style={{ marginBottom: '5%' }} >Create a Withdrawal Request</Heading>
 
-        <FormControl isInvalid={errorReqDesc} style={{ marginBottom: '3%' }} >
+        <FormControl style={{ marginBottom: '3%' }} >
             <FormLabel>Request Description</FormLabel>
                 <InputGroup>
                     <Input type='text' value={input.reqDesc} onChange={(e) => {
@@ -76,7 +76,7 @@ function CreateRequest({ setPageState, campaign, signer }) {
                     <FormErrorMessage >Wallet Address is required.</FormErrorMessage>
                 )}
         </FormControl>
-        <Button onClick={handleCreateRequest} style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
+        <Button isActive={input.add === null || input.amt === null || input.reqDesc === null || errorAdd || errorAmt || errorReqDesc} onClick={handleCreateRequest} style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
     </div>
   )
 }

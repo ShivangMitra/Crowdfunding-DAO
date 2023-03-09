@@ -36,7 +36,7 @@ function CreateCampaign({ setPageState, campaignFactory, signer }) {
         </div>
         <Heading style={{ marginBottom: '5%' }} >Create a New Campaign</Heading>
 
-        <FormControl isInvalid={errorMinContri} style={{ marginBottom: '3%' }} >
+        <FormControl style={{ marginBottom: '3%' }} >
             <FormLabel>Minimum Contribution Amount</FormLabel>
                 <InputGroup>
                     <Input type='number' value={input.minContri} onChange={(e) => {
@@ -114,7 +114,7 @@ function CreateCampaign({ setPageState, campaignFactory, signer }) {
                     <FormErrorMessage >Target amount is required.</FormErrorMessage>
                 )}
         </FormControl>
-        <Button onClick={handleCreate} style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
+        <Button isActive={input.desc === null || input.minContri === null || input.name === null || input.targetAmt === null || input.url === null || errorDesc || errorMinContri || errorName || errorTarget || errorUrl} onClick={handleCreate} style={{ width: '100%', marginTop: '5%' }} colorScheme='orange' backgroundColor={'tomato'} leftIcon={<AiFillPlusCircle />} >Create</Button>
     </div>
   )
 }
