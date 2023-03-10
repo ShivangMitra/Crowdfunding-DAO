@@ -8,7 +8,7 @@ import {
   } from '@chakra-ui/react'
 import { FaEthereum } from 'react-icons/fa'
 
-function Stats({ allCampaigns, totalEther, weiToEther }) {
+function Stats({ allCampaigns, totalEther }) {
   return (
     <div className='stats' >
         <Text fontSize='4xl' color='white' >Bring a creative project to life.</Text>
@@ -20,7 +20,7 @@ function Stats({ allCampaigns, totalEther, weiToEther }) {
             </Stat>
             <Divider orientation='vertical'/>
             <Stat className='stats-item'>
-                <StatNumber style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} >{weiToEther(totalEther)} ETH<FaEthereum/></StatNumber>
+                <StatNumber style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}} >{totalEther} ETH<FaEthereum/></StatNumber>
                 <StatLabel>Towards Creative Work</StatLabel>
                 {/* <StatHelpText>Feb 12 - Feb 28</StatHelpText> */}
             </Stat>

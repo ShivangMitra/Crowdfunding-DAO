@@ -1,7 +1,7 @@
 import React from 'react'
 import Cards from './Cards'
 
-function CardsContainer({ setPageState, allCampaigns, setCampaignIndex, loading, weiToEther }) {
+function CardsContainer({ setPageState, allCampaigns, setCampaignIndex, loading }) {
   return (
     <div className='cards-container' >
         {
@@ -12,7 +12,7 @@ function CardsContainer({ setPageState, allCampaigns, setCampaignIndex, loading,
           )
           :
           allCampaigns.map((data, index) => (
-            <Cards setPageState={setPageState} data={data} key={index} setCampaignIndex={setCampaignIndex} weiToEther={weiToEther} />
+            <Cards setPageState={setPageState} data={data} key={index} setCampaignIndex={setCampaignIndex} />
           ))
         }
     </div>

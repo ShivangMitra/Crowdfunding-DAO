@@ -416,15 +416,15 @@ function App() {
                 approver = approval
 
                 let data = {
-                  minContri: res[0].toNumber(),
-                  balance:res[1].toNumber(),
+                  minContri: weiToEther(res[0]),
+                  balance: weiToEther(res[1]),
                   reqLength: res[2].toNumber(),
                   appCount: res[3].toNumber(),
                   manager: res[4],
                   title: res[5],
                   desc: res[6],
                   url: res[7],
-                  targetAmt: res[8].toNumber(),
+                  targetAmt: weiToEther(res[8]),
                   address: add,
                   contract: campaignContract,
                   index: index
@@ -507,9 +507,9 @@ function App() {
               <Header setPageState={setPageState} />
               <div className='design' ></div>
             </div>
-            <Stats allCampaigns={allCampaigns} totalEther={totalEther} weiToEther={weiToEther} />
+            <Stats allCampaigns={allCampaigns} totalEther={totalEther} />
             <Heading fontSize='4xl' color={'white'} style={{ width:'23%', margin: '5%', marginBottom: '2%', marginTop: '8%' , display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} ><TbLayersLinked/> Active Campaigns</Heading>
-            <CardsContainer loading={campaignsLoading} setPageState={setPageState} allCampaigns={allCampaigns} setCampaignIndex={setCampaignIndex} weiToEther={weiToEther} />
+            <CardsContainer loading={campaignsLoading} setPageState={setPageState} allCampaigns={allCampaigns} setCampaignIndex={setCampaignIndex} />
             <Heading id='howitworks' fontSize='4xl' color={'white'} style={{ width:'21%', margin: '5%', marginBottom: '2%', marginTop: '8%' , display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} ><BiShowAlt/> How FTC Works</Heading>
             <Working/>
             </>
@@ -521,7 +521,7 @@ function App() {
           pageState === 'campaign'
           ?
           (
-            <CampaignPage setPageState={setPageState} campaign={allCampaigns.find(camp => camp.index === campaignIndex)} currentAdd={address} signer={signer} weiToEther={weiToEther} />
+            <CampaignPage setPageState={setPageState} campaign={allCampaigns.find(camp => camp.index === campaignIndex)} currentAdd={address} signer={signer} />
           )
           :
           null
@@ -539,7 +539,7 @@ function App() {
           pageState === 'viewRequest'
           ?
           (
-            <ViewRequest setPageState={setPageState} campaign={allCampaigns.find(camp => camp.index === campaignIndex)} currentAdd={address} signer={signer} weiToEther={weiToEther} />
+            <ViewRequest setPageState={setPageState} campaign={allCampaigns.find(camp => camp.index === campaignIndex)} currentAdd={address} signer={signer} />
           )
           :
           null
@@ -557,7 +557,7 @@ function App() {
           pageState === 'myCampaigns'
           ?
           (
-            <MyCampaigns setPageState={setPageState} managerCampaigns={managerCampaigns} setCampaignIndex={setCampaignIndex} weiToEther={weiToEther} />
+            <MyCampaigns setPageState={setPageState} managerCampaigns={managerCampaigns} setCampaignIndex={setCampaignIndex} />
           )
           :
           null
@@ -566,7 +566,7 @@ function App() {
           pageState === 'viewRequests'
           ?
           (
-            <ViewRequests setPageState={setPageState} donatedCampaigns={donatedCampaigns} setCampaignIndex={setCampaignIndex} weiToEther={weiToEther} />
+            <ViewRequests setPageState={setPageState} donatedCampaigns={donatedCampaigns} setCampaignIndex={setCampaignIndex} />
           )
           :
           null

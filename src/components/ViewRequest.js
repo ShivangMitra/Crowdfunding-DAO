@@ -21,7 +21,7 @@ function ViewRequest({ setPageState, campaign, currentAdd, signer, weiToEther })
         
                     requestsData.push({
                         desc: res[0],
-                        amt: res[1].toNumber(),
+                        amt: weiToEther(res[1]),
                         recipient: res[2],
                         completed: res[3],
                         approvalCount: res[4].toNumber(),
@@ -110,7 +110,7 @@ function ViewRequest({ setPageState, campaign, currentAdd, signer, weiToEther })
                             <Tr key={id}>
                                 <Td>{request.index}</Td>
                                 <Td>{request.desc}</Td>
-                                <Td>{`${weiToEther(request.amt)} ETH`}</Td>
+                                <Td>{`${request.amt} ETH`}</Td>
                                 <Td>{request.recipient.substring(0,5)+'...'+request.recipient.substring(request.recipient.length-4)}</Td>
                                 <Td>{request.approvalCount}/{campaign.appCount}</Td>
                                 <Td>

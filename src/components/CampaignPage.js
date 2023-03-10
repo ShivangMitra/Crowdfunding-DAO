@@ -6,7 +6,7 @@ import { BsFillPeopleFill, BsFillChatSquareQuoteFill } from 'react-icons/bs'
 import { FaAddressCard } from 'react-icons/fa'
 import { ethers } from 'ethers'
 
-function CampaignPage({ setPageState, campaign, currentAdd, signer, weiToEther }) {
+function CampaignPage({ setPageState, campaign, currentAdd, signer }) {
 
   const [contribution, setContribution] = useState('')
   const errorState = contribution === '' || (Number(contribution) === 0)
@@ -21,7 +21,7 @@ function CampaignPage({ setPageState, campaign, currentAdd, signer, weiToEther }
   const data = {
     minContri: {
       dis: 'Minimum Contribution',
-      val: `${weiToEther(campaign.minContri)} ETH ($${weiToEther(campaign.minContri * 1660)})`,
+      val: `${campaign.minContri} ETH ($${campaign.minContri * 1660})`,
       icon: (<BiDonateHeart color='#ff634780' fontSize='300%' style={{ marginRight: '5%' }} />)
     },
     add: {
@@ -66,8 +66,8 @@ function CampaignPage({ setPageState, campaign, currentAdd, signer, weiToEther }
         <Card style={{ marginBottom: '3%' }} >
           <CardBody>
             <Text fontSize='xs' style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '27%' }} >Campaign Balance <AiFillInfoCircle color='tomato' /> </Text>
-            <Text fontSize='xl' fontWeight='bold' display='flex' >{weiToEther(campaign.balance)} ETH <Text color='#ff634791' margin='0% 2%' >(${weiToEther(campaign.balance* 1660)})</Text> </Text>
-            <Text display='flex' >target of {weiToEther(campaign.targetAmt)} ETH <Text color='#00000082' margin='0% 2%' >(${weiToEther(campaign.targetAmt * 1660)})</Text></Text>
+            <Text fontSize='xl' fontWeight='bold' display='flex' >{campaign.balance} ETH <Text color='#ff634791' margin='0% 2%' >(${campaign.balance* 1660})</Text> </Text>
+            <Text display='flex' >target of {campaign.targetAmt} ETH <Text color='#00000082' margin='0% 2%' >(${campaign.targetAmt * 1660})</Text></Text>
             <Progress value={(campaign.balance / campaign.targetAmt) * 100} size='xs' colorScheme='orange' marginTop='2%' />
           </CardBody>
         </Card>
@@ -75,7 +75,7 @@ function CampaignPage({ setPageState, campaign, currentAdd, signer, weiToEther }
           <CardBody>
             <Heading color='#29da2e' marginBottom='2%' >Contribute Now!</Heading>
             <InputGroup>
-              <Input type='number' placeholder={weiToEther(campaign.minContri)} onChange={(e) => {setContribution(e.target.value)}} />
+              <Input type='number' placeholder={campaign.minContri} onChange={(e) => {setContribution(e.target.value)}} />
               <InputRightAddon children='ETH' backgroundColor='#29da2e' color='white' />
             </InputGroup>
             <Button isActive={errorState} onClick={handleContribution} style={{ width: '100%', marginTop: '5%' }} colorScheme='green' backgroundColor={'#29da2e'} leftIcon={<BiDonateHeart />} >Contribute</Button>
