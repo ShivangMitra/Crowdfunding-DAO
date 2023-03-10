@@ -4,7 +4,6 @@ import { AiFillInfoCircle } from 'react-icons/ai'
 import { BiDonateHeart } from 'react-icons/bi'
 import { BsFillPeopleFill, BsFillChatSquareQuoteFill } from 'react-icons/bs'
 import { FaAddressCard } from 'react-icons/fa'
-import { ethers } from 'ethers'
 
 function CampaignPage({ setPageState, campaign, currentAdd, signer, etherToWei }) {
 

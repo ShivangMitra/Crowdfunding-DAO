@@ -61,7 +61,7 @@ function ViewRequest({ setPageState, campaign, currentAdd, signer, weiToEther })
             <MdArrowBack color='tomato'/>
             <Text color='tomato' fontWeight='bold'>Go Back</Text>
         </div>
-        <Heading style={{ marginBottom: '2%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >Withdrawal Requests <Text color='#0000006e' >{weiToEther(campaign.balance)} ETH (${weiToEther(campaign.balance * 1661)})</Text> </Heading>
+        <Heading style={{ marginBottom: '2%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >Withdrawal Requests <Text color='#0000006e' >{campaign.balance} ETH (${campaign.balance * 1661})</Text> </Heading>
         <Text fontSize='2xl' style={{ marginBottom: '5%' }} >{campaign.title}</Text>
 
         <TableContainer>
