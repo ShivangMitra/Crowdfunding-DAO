@@ -22,12 +22,12 @@ function Cards({ setPageState, data, setCampaignIndex }) {
           <Heading size='md' style={{ display: 'flex', alignItems:'center', justifyContent: 'space-between' }} >{data.title}<FaHandsHelping color={'tomato'} /></Heading>
           <Text fontSize='sm' style={{ display: 'flex', alignItems:'center', justifyContent: 'space-between', width: '35%' }} ><BiWalletAlt color='tomato' /> <b>{' 0x369...0b9'}</b></Text>
           <Text color='tomato' fontSize='2xl' style={{display: 'flex', justifyContent: 'space-between'}} >
-            {data.balance} ETH {`($${data.balance*1660})`}
+            {data.balance} ETH {`($${data.balance*1661})`}
             <Button onClick={handleCampaignPage} variant='solid' colorScheme='orange' backgroundColor={'tomato'} rightIcon={<FaHandHoldingUsd/>}>
             Support
             </Button>
           </Text>
-          <Text color={'#0000008a'} >Target of {data.targetAmt} ETH {`($${data.targetAmt * 1660})`}</Text>
+          <Text color={'#0000008a'} >Target of {data.targetAmt} ETH {`($${data.targetAmt * 1661})`}</Text>
           <Progress value={(data.balance / data.targetAmt) * 100} size='xs' colorScheme='orange' />
         </Stack>
       </CardBody>

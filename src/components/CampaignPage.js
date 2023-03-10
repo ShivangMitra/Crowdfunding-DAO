@@ -6,22 +6,20 @@ import { BsFillPeopleFill, BsFillChatSquareQuoteFill } from 'react-icons/bs'
 import { FaAddressCard } from 'react-icons/fa'
 import { ethers } from 'ethers'
 
-function CampaignPage({ setPageState, campaign, currentAdd, signer }) {
+function CampaignPage({ setPageState, campaign, currentAdd, signer, etherToWei }) {
 
   const [contribution, setContribution] = useState('')
   const errorState = contribution === '' || (Number(contribution) === 0)
 
   const handleContribution = () => {
-    let contri = String(Number(contribution) * 1000000000000000000)
-
     const signedContract = campaign.contract.connect(signer)
-    signedContract.contribute({value: ethers.utils.parseUnits(contri , "wei")})
+    signedContract.contribute({value: etherToWei(contribution)})
   }
 
   const data = {
     minContri: {
       dis: 'Minimum Contribution',
-      val: `${campaign.minContri} ETH ($${campaign.minContri * 1660})`,
+      val: `${campaign.minContri} ETH ($${campaign.minContri * 1661})`,
       icon: (<BiDonateHeart color='#ff634780' fontSize='300%' style={{ marginRight: '5%' }} />)
     },
     add: {
@@ -66,8 +64,8 @@ function CampaignPage({ setPageState, campaign, currentAdd, signer }) {
         <Card style={{ marginBottom: '3%' }} >
           <CardBody>
             <Text fontSize='xs' style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '27%' }} >Campaign Balance <AiFillInfoCircle color='tomato' /> </Text>
-            <Text fontSize='xl' fontWeight='bold' display='flex' >{campaign.balance} ETH <Text color='#ff634791' margin='0% 2%' >(${campaign.balance* 1660})</Text> </Text>
-            <Text display='flex' >target of {campaign.targetAmt} ETH <Text color='#00000082' margin='0% 2%' >(${campaign.targetAmt * 1660})</Text></Text>
+            <Text fontSize='xl' fontWeight='bold' display='flex' >{campaign.balance} ETH <Text color='#ff634791' margin='0% 2%' >(${campaign.balance* 1661})</Text> </Text>
+            <Text display='flex' >target of {campaign.targetAmt} ETH <Text color='#00000082' margin='0% 2%' >(${campaign.targetAmt * 1661})</Text></Text>
             <Progress value={(campaign.balance / campaign.targetAmt) * 100} size='xs' colorScheme='orange' marginTop='2%' />
           </CardBody>
         </Card>

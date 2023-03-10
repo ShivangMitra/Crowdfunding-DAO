@@ -22,12 +22,12 @@ function ReqCampaignCard({ setPageState, setCampaignIndex, camp }) {
             <CardBody style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width:'100%' }} >
                 <Heading size='md' style={{ display: 'flex', alignItems:'center', justifyContent: 'space-between' }} >{camp.title}<FaHandsHelping color={'tomato'} /></Heading>
                 <Text color='tomato' fontSize='2xl' style={{display: 'flex', justifyContent: 'space-between'}} >
-                    {camp.balance} ETH {`($${camp.balance * 1660})`}
+                    {camp.balance} ETH {`($${camp.balance * 1661})`}
                     <Button onClick={handleCampaignPage} variant='solid' colorScheme='orange' backgroundColor={'tomato'} rightIcon={<FaHandHoldingUsd/>}>
                     View Requests
                     </Button>
                 </Text>
-                <Text color={'#0000008a'} >Target of {camp.targetAmt} ETH {`($${camp.targetAmt * 1660})`}</Text>
+                <Text color={'#0000008a'} >Target of {camp.targetAmt} ETH {`($${camp.targetAmt * 1661})`}</Text>
                 <Progress value={(camp.balance / camp.targetAmt) * 100} size='xs' colorScheme='orange' />
             </CardBody>
             </Stack>
