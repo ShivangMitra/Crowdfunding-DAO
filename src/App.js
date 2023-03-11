@@ -163,6 +163,26 @@ function App() {
       "inputs": [
         {
           "internalType": "uint256",
+          "name": "newTarget",
+          "type": "uint256"
+        }
+      ],
+      "name": "modifyTarget",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "switchCampaignActiveStatus",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
           "name": "minimum",
           "type": "uint256"
         },
@@ -229,6 +249,19 @@ function App() {
     },
     {
       "inputs": [],
+      "name": "campaignActiveStatus",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "getRequestsCount",
       "outputs": [
         {
@@ -288,6 +321,11 @@ function App() {
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
         }
       ],
       "stateMutability": "view",
@@ -427,7 +465,8 @@ function App() {
                   targetAmt: weiToEther(res[8]),
                   address: add,
                   contract: campaignContract,
-                  index: index
+                  index: index,
+                  active: res[9]
                 }
 
                 campaignsEther += data.balance

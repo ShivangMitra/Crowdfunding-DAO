@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { Button, Heading, Text, Card, CardBody, Progress, InputGroup, Input, InputRightAddon, Box } from '@chakra-ui/react'
+import React, {useState, useRef} from 'react'
+import { Button, Heading, Text, Card, CardBody, Progress, InputGroup, Input, InputRightAddon, Box, AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, useDisclosure } from '@chakra-ui/react'
 import { AiFillInfoCircle } from 'react-icons/ai'
 import { BiDonateHeart } from 'react-icons/bi'
 import { BsFillPeopleFill, BsFillChatSquareQuoteFill } from 'react-icons/bs'
@@ -7,12 +7,28 @@ import { FaAddressCard } from 'react-icons/fa'
 
 function CampaignPage({ setPageState, campaign, currentAdd, signer, etherToWei }) {
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef()
+
   const [contribution, setContribution] = useState('')
   const errorState = contribution === '' || (Number(contribution) === 0)
+
+  const [newTarget, setNewTarget] = useState('')
+  const errorNewTarget = newTarget === '' || (Number(newTarget) === 0)
 
   const handleContribution = () => {
     const signedContract = campaign.contract.connect(signer)
     signedContract.contribute({value: etherToWei(contribution)})
+  }
+
+  const handleSwitchStatus = () => {
+    const signedContract = campaign.contract.connect(signer)
+    signedContract.switchCampaignActiveStatus()
+  }
+
+  function handleModifyTarget(){
+    const signedContract = campaign.contract.connect(signer)
+    signedContract.modifyTarget(etherToWei(newTarget))
   }
 
   const data = {
@@ -40,6 +56,44 @@ function CampaignPage({ setPageState, campaign, currentAdd, signer, etherToWei }
 
   return (
     <div className='campaign-page-container' >
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              { campaign.active ? 'Deactivate Campaign' : 'Activate Campaign' }
+            </AlertDialogHeader>
+
+            {
+              campaign.active
+              ?
+              (
+                <AlertDialogBody>
+                  Are you sure? Your campaign will move to the archives after this action.
+                </AlertDialogBody>
+              )
+              :
+              (
+                <AlertDialogBody>
+                  Are you sure? Your campaign will move to active campaigns after this action.
+                </AlertDialogBody>
+              )
+            }
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme={ campaign.active ? 'red' : 'green' } onClick={handleSwitchStatus} ml={3}>
+                { campaign.active ? 'Deactivate' : 'Activate' }
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
       <div className='campaign-page-left' >
         <div className='campaign-heading' >
           <Heading marginBottom='2%' >{campaign.title}</Heading>
@@ -126,6 +180,71 @@ function CampaignPage({ setPageState, campaign, currentAdd, signer, etherToWei }
                   Create Withdrawal Requests
                 </Box>
                 <Text> Hey {currentAdd.substring(0,5)+'...'+currentAdd.substring(currentAdd.length-4)} create a Withdarwal Request, take your project to new heights.</Text>
+              </CardBody>
+            </Card>
+          )
+          :
+          null
+        }
+        {
+          campaign.manager.toUpperCase() === currentAdd.toUpperCase()
+          ?
+          (
+            <Card style={{ marginBottom: '3%' }} >
+              <CardBody>
+              <InputGroup>
+                <Input type='number' placeholder={Number(campaign.balance) + 0.1} onChange={(e) => {setNewTarget(e.target.value)}} />
+                <InputRightAddon children='ETH' backgroundColor='#2e49d6' color='white' />
+              </InputGroup>
+              <Box
+                  onClick={() => {if(!errorNewTarget)handleModifyTarget()}}
+                  width='100%'
+                  as='button'
+                  p={4}
+                  color='white'
+                  fontWeight='bold'
+                  borderRadius='md'
+                  bgGradient={errorNewTarget ? 'linear(to-r, #4e4e4e, #555555)' : 'linear(to-r, #c73ee5, #2e49d6)'}
+                  _hover={errorNewTarget ? null :{
+                    bgGradient: 'linear(to-r, #922ea7, #203396)',
+                  }}
+                  marginBottom='2%'
+                  marginTop='5%'
+                >
+                  Modify Target
+                </Box>
+                <Text> Modify your campaign target according to your needs.</Text>
+              </CardBody>
+            </Card>
+          )
+          :
+          null
+        }
+        {
+          campaign.manager.toUpperCase() === currentAdd.toUpperCase()
+          ?
+          (
+            <Card style={{ marginBottom: '3%' }} >
+              <CardBody>
+              <Box
+                  onClick={onOpen}
+                  width='100%'
+                  as='button'
+                  p={4}
+                  color='white'
+                  fontWeight='bold'
+                  borderRadius='md'
+                  bgGradient={campaign.active ? 'linear(to-r, red.500, red.500)' : 'linear(to-r, #3ee553, #3ec8e5)'}
+                  _hover={campaign.active ? {
+                    bgGradient: 'linear(to-r, #852525, red.500)',
+                  } : {
+                    bgGradient: 'linear(to-r, #32ba43, #34aec7)'
+                  }}
+                  marginBottom='2%'
+                >
+                  {campaign.active ? 'Deactivate' : 'Activate'}
+                </Box>
+                <Text> Hey {currentAdd.substring(0,5)+'...'+currentAdd.substring(currentAdd.length-4)} want to {campaign.active ? 'deactivate' : 'activate'} your campaign.</Text>
               </CardBody>
             </Card>
           )
